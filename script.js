@@ -102,21 +102,36 @@ function loadQuestion() {
 // Submit answer
 document.getElementById("submit-btn").addEventListener("click", () => {
   const input = document.getElementById("answer-input").value.trim().toLowerCase();
-  const lowerCaseAnswers = currentQuestion.answers.map((answer) => answer.toLowerCase());
+  const lowerCaseAnswers = currentQuestion.answers.map((answer) =>
+    answer.toLowerCase()
+  );
 
   if (lowerCaseAnswers.includes(input)) {
-    const originalAnswer = currentQuestion.answers[lowerCaseAnswers.indexOf(input)];
+    const answerIndex = lowerCaseAnswers.indexOf(input);
+    const originalAnswer = currentQuestion.answers[answerIndex];
     if (!revealedAnswers.includes(originalAnswer)) {
       revealedAnswers.push(originalAnswer);
       displayAnswers();
 
+      // Assign points based on answer position
+      let pointsEarned = 0;
+      if (answerIndex === 0) {
+        pointsEarned = 100; // First answer: 100 points
+      } else if (answerIndex === 1) {
+        pointsEarned = 75; // Second answer: 75 points
+      } else {
+        pointsEarned = 50; // All others: 50 points
+      }
+
+      // Add points to the current team
+      scores[currentTeamIndex] += pointsEarned;
+      updateTeamList(); // Update scores in the sidebar
+
+      alert(`${teams[currentTeamIndex]} earned ${pointsEarned} points!`);
+
       // Check if all answers are revealed
       if (revealedAnswers.length === currentQuestion.answers.length) {
-        // Add points to the team currently answering
-        scores[currentTeamIndex] += 100;
-        updateTeamList(); // Update scores in the sidebar
         document.getElementById("next-btn").classList.remove("hidden"); // Show Next button
-        alert(`${teams[currentTeamIndex]} answered correctly and gets 100 points!`);
       }
     }
   } else {
