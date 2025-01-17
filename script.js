@@ -25,15 +25,25 @@ const questions = [
       },
       {
         question: "Name something that usually comes in pairs.",
-        answers: ["Shoes", "Socks", "Twins", "Pants", "Scissors", "Eyes", "Dice"]
+        answers: ["Shoes", "Socks", "Twins", "Pants", "Scissors", "Eyes", "Dice"],
+      },
+      {
+        question: "Name something Calvin loves to play with.",
+        answers: ["Mixer", "Blender", "Outlets", "Crock Pot", "Cars", "blocks"],
+      },
+      {
+        question: "What does Calvin like to eat most?",
+        answers: ["cheese stick", "blueberries", "strawberries", "cookies", "crackers", "apple sauce"]
       },
   ];
 
-let currentQuestionIndex = 0; // Tracks the current question index
+let currentQuestionIndex = 0; 
 let currentQuestion = questions[currentQuestionIndex];
 let revealedAnswers = [];
 let strikes = 0;
-let teams = []; // Array to store team names
+let teams = [];
+let scores = [];
+let currentTeamIndex = 0;
 
 // Hide game screen initially
 document.getElementById("game-screen").classList.add("hidden");
@@ -44,6 +54,7 @@ document.getElementById("add-team-btn").addEventListener("click", () => {
   const teamName = teamNameInput.value.trim();
   if (teamName) {
     teams.push(teamName); // Add team name to the array
+    scores.push(0); // Initialize the team's score to 0
     updateTeamList(); // Update the team list display
     teamNameInput.value = ""; // Clear the input field
   } else {
@@ -60,24 +71,30 @@ document.getElementById("start-game-btn").addEventListener("click", () => {
   document.getElementById("team-input-screen").classList.add("hidden"); // Hide the team input screen
   document.getElementById("game-screen").classList.remove("hidden"); // Show the game screen
   loadQuestion(); // Load the first question
+  updateTeamList(); // Display teams and scores
 });
 
 // Update the team list display
 function updateTeamList() {
   const teamList = document.getElementById("team-list");
   teamList.innerHTML = ""; // Clear the list
-  teams.forEach((team) => {
+  teams.forEach((team, index) => {
     const li = document.createElement("li");
-    li.textContent = team;
+    li.textContent = `${team}: ${scores[index]} points`; // Show team name and score
     teamList.appendChild(li);
   });
 }
+//-------------------------------------------
 
+//Main Game Logic
 document.getElementById("question").textContent = currentQuestion.question;
 
+//Submit Answer
 document.getElementById("submit-btn").addEventListener("click", () => {
   const input = document.getElementById("answer-input").value.trim().toLowerCase();
-  const lowerCaseAnswers = currentQuestion.answers.map(answer => answer.toLowerCase());
+  const lowerCaseAnswers = currentQuestion.answers.map((answer) =>
+    answer.toLowerCase()
+  );
 
   if (lowerCaseAnswers.includes(input)) {
     const originalAnswer = currentQuestion.answers[lowerCaseAnswers.indexOf(input)];
@@ -87,6 +104,8 @@ document.getElementById("submit-btn").addEventListener("click", () => {
 
       // Check if all answers are revealed
       if (revealedAnswers.length === currentQuestion.answers.length) {
+        scores[currentTeamIndex] += 100; // Award 100 points to the current team
+        updateTeamList(); // Update scores in the sidebar
         document.getElementById("next-btn").classList.remove("hidden"); // Show Next button
       }
     }
@@ -101,14 +120,16 @@ document.getElementById("submit-btn").addEventListener("click", () => {
   document.getElementById("answer-input").value = "";
 });
 
-document.getElementById("next-btn").addEventListener("click", loadNextQuestion);
+// Move to the next question and switch teams
+document.getElementById("next-btn").addEventListener("click", () => {
+  loadNextQuestion();
+  currentTeamIndex = (currentTeamIndex + 1) % teams.length; // Switch to the next team
+  alert(`It's ${teams[currentTeamIndex]}'s turn!`); // Notify which team's turn it is
+});
 
 function loadNextQuestion() {
-  // Increment the current question index
   currentQuestionIndex++;
-  
   if (currentQuestionIndex < questions.length) {
-    // Load the next question
     currentQuestion = questions[currentQuestionIndex];
     revealedAnswers = [];
     strikes = 0;
@@ -152,8 +173,10 @@ function resetGame() {
   currentQuestion = questions[currentQuestionIndex]; // Reset to the first question
   revealedAnswers = [];
   strikes = 0;
+  scores = teams.map(() => 0); // Reset all scores to 0
   loadQuestion();
   displayAnswers();
   displayStrikes();
+  updateTeamList();
   document.getElementById("next-btn").classList.add("hidden"); // Hide the Next button
 }
