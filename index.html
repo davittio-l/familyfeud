@@ -45,6 +45,20 @@
         box-shadow: 0 0 10px 2px #e94560; /* Glow effect */
       }
 
+      #answer-input {
+        background-color: white; /* White background for input field */
+        color: black; /* Black text for contrast */
+        border: 2px solid #ffd700; /* Yellow border to match the theme */
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      #answer-input::placeholder {
+        color: #aaa; /* Light gray placeholder for better contrast */
+        font-style: italic;
+      }
+
       #team-sidebar {
         background-color: #16213e; /* Darker blue for the sidebar */
         border-radius: 10px;
@@ -90,6 +104,54 @@
         background-color: #ffd700; /* Yellow hover */
         color: black;
       }
+      #choose-first-team {
+        background-color: #0f3460; /* Family Feud blue */
+        color: #ffd700; /* Bold yellow for text */
+        border: 3px solid #e94560; /* Red border */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px 2px #ffd700; /* Glow effect */
+        width: 50%;
+        margin: auto;
+        text-align: center;
+      }
+
+      #choose-first-team h2 {
+        font-family: 'Arial Black', sans-serif;
+        text-transform: uppercase;
+        color: #ffd700; /* Yellow heading text */
+        text-shadow: 2px 2px #000; /* Black shadow for heading */
+        margin-bottom: 20px;
+      }
+
+      #first-team-select {
+        background-color: #fff; /* White background */
+        color: #000; /* Black text */
+        border: 2px solid #ffd700; /* Yellow border */
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        width: 100%;
+      }
+
+      #confirm-first-team-btn {
+        background-color: #00af91; /* Green button */
+        color: #fff; /* White text */
+        font-family: 'Arial Black', sans-serif;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        box-shadow: 0 0 5px 2px #ffd700; /* Yellow glow effect */
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      #confirm-first-team-btn:hover {
+        transform: scale(1.05);
+        background-color: #ffd700; /* Yellow hover */
+        color: #000; /* Black tex
 
       #start-game-btn {
         background-color: #1a9cff; /* Blue button */
@@ -160,6 +222,20 @@
     </div>
     <button id="start-game-btn" class="w-full bg-green-500 text-white py-2 rounded">
       Start Game
+    </button>
+  </div>
+
+  <div id="choose-first-team" class="hidden mt-6">
+    <h2 class="text-xl font-bold text-center mb-4">Which team goes first?</h2>
+    <select
+      id="first-team-select"
+      class="w-full p-2 border rounded mb-4"
+    ></select>
+    <button
+      id="confirm-first-team-btn"
+      class="w-full bg-green-500 text-white py-2 rounded"
+    >
+      Confirm and Start Game
     </button>
   </div>
 
