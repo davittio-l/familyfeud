@@ -33,6 +33,45 @@ let currentQuestionIndex = 0; // Tracks the current question index
 let currentQuestion = questions[currentQuestionIndex];
 let revealedAnswers = [];
 let strikes = 0;
+let teams = []; // Array to store team names
+
+// Hide game screen initially
+document.getElementById("game-screen").classList.add("hidden");
+
+// Add team name functionality
+document.getElementById("add-team-btn").addEventListener("click", () => {
+  const teamNameInput = document.getElementById("team-name-input");
+  const teamName = teamNameInput.value.trim();
+  if (teamName) {
+    teams.push(teamName); // Add team name to the array
+    updateTeamList(); // Update the team list display
+    teamNameInput.value = ""; // Clear the input field
+  } else {
+    alert("Please enter a valid team name.");
+  }
+});
+
+// Start the game
+document.getElementById("start-game-btn").addEventListener("click", () => {
+  if (teams.length === 0) {
+    alert("Please add at least one team before starting the game.");
+    return;
+  }
+  document.getElementById("team-input-screen").classList.add("hidden"); // Hide the team input screen
+  document.getElementById("game-screen").classList.remove("hidden"); // Show the game screen
+  loadQuestion(); // Load the first question
+});
+
+// Update the team list display
+function updateTeamList() {
+  const teamList = document.getElementById("team-list");
+  teamList.innerHTML = ""; // Clear the list
+  teams.forEach((team) => {
+    const li = document.createElement("li");
+    li.textContent = team;
+    teamList.appendChild(li);
+  });
+}
 
 document.getElementById("question").textContent = currentQuestion.question;
 
